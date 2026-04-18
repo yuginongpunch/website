@@ -1,1 +1,25 @@
-
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>외계통신 통신 수정</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>통신 기록 수정</h1>
+    <form action="{{ url_for('edit', post_id=post.id) }}" method="POST">
+        <div class="form-group">
+            <label>제목 수정</label><br>
+            <input type="text" name="title" value="{{ post.title }}" required style="width: 100%; padding: 10px;">
+        </div>
+        <br>
+        <div class="form-group">
+            <label>내용 수정</label><br>
+            <textarea name="content" rows="10" required style="width: 100%; padding: 10px;">{{ post.content }}</textarea>
+        </div>
+        <br>
+        <button type="submit" class="btn">통신 업데이트</button>
+        <a href="{{ url_for('index') }}" style="color: #ccc;">취소</a>
+    </form>
+</body>
+</html>
