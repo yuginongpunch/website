@@ -1,14 +1,57 @@
-# app.py
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 
-#Flask 객체 인스턴스 생성
 app = Flask(__name__)
 
-@app.route('/') # 접속하는 url
-def index():
-  return render_template('index.html')
 
-if __name__=="__main__":
-  app.run(debug=True)
-  # host 등을 직접 지정하고 싶다면
-  # app.run(host="127.0.0.1", port="5000", debug=True)
+posts = []
+
+post_id_counter = 1
+
+@app.route('/')
+def index():
+    
+    return render_template('index.html', posts=posts)
+
+@app.route('/write', methods=['GET', 'POST'])
+def write():
+    global post_id_counter
+    if request.method == 'POST':
+        
+        title = request.form.get('title')
+        content = request.form.get('content')
+        
+        
+        post = {
+            'id': post_id_counter,
+            'title': title,
+            'content': content
+        }
+        posts.append(post)
+        post_id_counter += 1
+        return redirect(url_for('index'))
+    
+    
+    return render_template('write.html')
+
+@app.route('/edit/<int:post_id>', methods=['GET', 'POST'])
+def edit(post_id):
+    
+    post = next((p for p in posts if p['id'] == post_id), None)
+    
+    if request.method == 'POST':
+        
+        post['title'] = request.form.get('title')
+        post['content'] = request.form.get('content')
+        return redirect(url_for('index'))
+    
+    return render_template('edit.html', post=post)
+
+@app.route('/delete/<int:post_id>')
+def delete(post_id):
+    global posts
+    
+    posts = [p for p in posts if p['id'] != post_id]
+    return redirect(url_for('index'))
+
+if __name__ == '__main__':
+    app.run(debug=True)
