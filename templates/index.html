@@ -2,11 +2,23 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>spaceletter</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>외계통신</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>외계통신</h1>
+    <h1>외계통신 게시판</h1>
+    <a href="{{ url_for('write') }}" class="btn">메시지 작성</a>
+    <hr>
+    <div id="post-list">
+        {% for post in posts %}
+        <div class="post-item">
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.content }}</p>
+            <a href="{{ url_for('edit', post_id=post.id) }}">수정</a>
+            <a href="javascript:void(0);" onclick="confirmDelete('{{ post.id }}')">삭제</a>
+        </div>
+        {% endfor %}
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
-
